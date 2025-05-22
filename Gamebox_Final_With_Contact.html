@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEBOX Gaming Zone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+
+html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #ff69b4, #7c3aed);
+    border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #2d3748;
+}
+
+
+        /* Custom font family - changed to Montserrat */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #1a202c; /* Dark background for gaming theme */
+            color: #e2e8f0; /* Light text color */
+        }
+        /* Custom styling for the business name */
+        .gamebox-logo .game {
+            color: #FF69B4; /* Pink color for "GAME" */
+        }
+        .gamebox-logo .box {
+            color: #ffffff; /* White color for "BOX" to stand out on dark background, matching image */
+        }
+        /* General button styling */
+        .btn-primary {
+            @apply inline-block px-6 py-2 text-base md:px-8 md:py-3 md:text-lg font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out;
+        }
+        /* Card styling */
+        .card {
+            @apply bg-gray-800 rounded-xl shadow-lg p-4 md:p-6 flex flex-col items-center text-center transform hover:scale-105 transition duration-300 ease-in-out;
+        }
+        /* Pricing table styling */
+        .pricing-card {
+            @apply bg-gray-800 rounded-xl shadow-lg p-4 md:p-6 flex flex-col items-center text-center border-2 border-purple-600 transform hover:scale-105 transition duration-300 ease-in-out;
+        }
+        .price-option {
+            @apply text-2xl md:text-3xl font-extrabold mb-2;
+        }
+        .price-duration {
+            @apply text-base md:text-xl font-normal text-gray-400;
+        }
+
+        /* Styles for the scroll-in animation (images) */
+        .slide-in-item {
+            opacity: 0;
+            transform: translateY(100px); /* Start 100px below its final position */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Smooth transition */
+        }
+
+        /* Styles for the fade-in-up animation (text) */
+        .fade-in-up-item {
+            opacity: 0;
+            transform: translateY(20px); /* Start slightly below its final position */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Smooth transition */
+        }
+
+        .slide-in-item.is-visible,
+        .fade-in-up-item.is-visible {
+            opacity: 1;
+            transform: translateY(0); /* Slide to its final position */
+        }
+
+        /* Custom text shadow utilities for better readability */
+        .text-shadow-lg {
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+        .text-shadow-md {
+            text-shadow: 1.5px 1.5px 6px rgba(0, 0, 0, 0.6);
+        }
+        .text-shadow-sm {
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Hero Section specific styling - now uses a solid background color */
+        .hero-background {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            background-image: url('fc 25.jpeg'), url('hq720.jpg'); /* Re-added hero specific backgrounds */
+            background-size: cover, cover;
+            background-position: center center, bottom center;
+            background-repeat: no-repeat, no-repeat;
+        }
+
+        /* Dropdown menu styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #2d3748; /* Darker gray background for dropdown */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            border-radius: 0.5rem; /* Rounded corners */
+            overflow: hidden; /* Ensures rounded corners apply to content */
+            padding: 0.5rem 0; /* Vertical padding */
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            color: #e2e8f0;
+            padding: 0.75rem 1rem; /* Padding for each item */
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background-color: #4a5568; /* Hover background */
+            color: #FF69B4; /* Pink hover text */
+        }
+
+        /* Nested dropdown for PC games */
+        .nested-dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 100%; /* Position to the right of the parent */
+            top: 0;
+            background-color: #2d3748;
+            min-width: 180px; /* Wider for game names */
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 101; /* Higher z-index than parent dropdown */
+            border-radius: 0.5rem;
+            overflow: hidden;
+            padding: 0.5rem 0;
+        }
+
+        .dropdown-item.has-nested:hover .nested-dropdown-menu {
+            display: block;
+        }
+
+        /* Mobile navigation toggle */
+        .menu-toggle {
+            display: none; /* Hidden by default on larger screens */
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 20px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile navigation menu */
+        .mobile-nav {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: #1a202c; /* Same as body background */
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 99;
+            padding: 1rem 0;
+        }
+
+        .mobile-nav.active {
+            display: flex;
+        }
+
+        .mobile-nav li {
+            text-align: center;
+            padding: 0.75rem 0;
+        }
+
+        .mobile-nav li a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #e2e8f0;
+            transition: color 0.2s;
+        }
+
+        .mobile-nav li a:hover {
+            color: #FF69B4;
+        }
+
+        /* Show hamburger menu on small screens and hide desktop nav */
+        @media (max-width: 767px) {
+            .menu-toggle {
+                display: flex;
+            }
+            nav ul {
+                display: none; /* Hide desktop navigation */
+            }
+            header .container {
+                flex-wrap: wrap; /* Allow items to wrap */
+            }
+        }
+    
+</style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-gray-900 text-white py-6 shadow-md">
+        <div class="container mx-auto px-4 flex justify-between items-center relative">
+            <div class="text-3xl font-extrabold flex flex-col items-start">
+                <span class="gamebox-logo">
+                    <span class="game">GAME</span><span class="box">BOX</span>
+                </span>
+                <span class="text-xl font-medium mt-1 text-gray-400">Gaming Zone</span>
+            </div>
+            <div class="menu-toggle" id="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav class="w-full md:w-auto">
+                <ul class="flex space-x-6 md:flex" id="desktop-nav">
+                    <li><a href="#about" class="hover:text-pink-500 transition duration-200">About Us</a></li>
+                    <li class="relative dropdown">
+                        <a href="#games" class="hover:text-pink-500 transition duration-200 cursor-pointer">Games</a>
+                        <ul class="dropdown-menu">
+                            <li class="relative">
+                                <a href="#games" class="dropdown-item has-nested">PC</a>
+                                <ul class="nested-dropdown-menu">
+                                    <li class="dropdown-item">FC 25</li>
+                                    <li class="dropdown-item">Cricket 24</li>
+                                    <li class="dropdown-item">Street Fighter</li>
+                                    <li class="dropdown-item">Tekken</li>
+                                    <li class="dropdown-item">Mortal Kombat</li>
+                                    <li class="dropdown-item">Apex Legends</li>
+                                    <li class="dropdown-item">GTA 5</li>
+                                    <li class="dropdown-item">RDR 2</li>
+                                    <li class="dropdown-item">Valorant</li>
+                                    <li class="dropdown-item">PUBG PC</li>
+                                    <li class="dropdown-item">WWE 2K25</li>
+                                </ul>
+                            </li>
+                            <li><a href="#games" class="dropdown-item">PS5</a></li>
+                            <li><a href="#games" class="dropdown-item">Xbox Series S</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#pricing" class="hover:text-pink-500 transition duration-200">Pricing</a></li>
+                    <li><a href="#contact" class="hover:text-pink-500 transition duration-200">Contact</a></li>
+                </ul>
+                <ul class="mobile-nav" id="mobile-nav-menu">
+                    <li><a href="#about">About Us</a></li>
+                    <li class="relative">
+                        <a href="#games">Games</a>
+                        <ul class="nested-dropdown-menu" style="position: static; display: none; box-shadow: none; padding-left: 1rem;" data-mobile-nested>
+                            <li><a href="#games">FC 25</a></li>
+                            <li><a href="#games">Cricket 24</a></li>
+                            <li><a href="#games">Street Fighter</a></li>
+                            <li><a href="#games">Tekken</a></li>
+                            <li><a href="#games">Mortal Kombat</a></li>
+                            <li><a href="#games">Apex Legends</a></li>
+                            <li><a href="#games">GTA 5</a></li>
+                            <li><a href="#games">RDR 2</a></li>
+                            <li><a href="#games">Valorant</a></li>
+                            <li><a href="#games">PUBG PC</a></li>
+                            <li><a href="#games">WWE 2K25</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="relative hero-background h-screen flex items-center justify-center text-center px-4">
+        <div class="absolute inset-0 bg-black opacity-85"></div>
+        <div class="relative z-10 text-white">
+            <h1 class="text-4xl md:text-7xl lg:text-8xl font-extrabold leading-tight mb-4 text-shadow-lg fade-in-up-item pt-16">
+                Unleash Your Inner Gamer at <br>
+                <span class="gamebox-logo">
+                    <span class="game">GAME</span><span class="box">BOX</span>
+                </span>
+            </h1>
+            <p class="text-2xl md:text-5xl font-semibold leading-normal mb-6 text-gray-300 text-shadow-md fade-in-up-item">Gaming Zone</p>
+            <p class="text-base md:text-3xl mb-4 max-w-3xl mx-auto leading-normal text-shadow-sm fade-in-up-item">
+                Next-gen gaming is now available at <span class="font-bold text-pink-400">Khilgaon, Dhaka</span>!
+                Experience the thrill on PC, PS5, and Xbox Series S with <span class="font-bold text-pink-400">4K & 1080p TVs</span> and <span class="font-bold text-purple-400">Hall Effect Controllers</span>.
+            </p>
+            <p class="text-base md:text-2xl mb-10 max-w-3xl mx-auto leading-normal text-shadow-sm fade-in-up-item">
+                We are proud to be the <span class="font-bold text-yellow-400">first franchise to open a high-performance gaming zone</span> in the area, fully air-conditioned for your ultimate comfort.
+            </p>
+            <a href="#pricing" class="btn-primary fade-in-up-item">View Pricing & Book Now!</a>
+        </div>
+    </section>
+
+    <section id="image-showcase" class="py-12 md:py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center mb-8 md:mb-12 text-pink-500 fade-in-up-item">Featured Moments</h2>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-8">
+                <div class="w-full md:w-1/2 lg:w-1/3 slide-in-item">
+                    <img src="fc 25.jpeg" alt="FC 25 Gameplay" class="rounded-xl shadow-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x400/374151/d1d5db?text=FC+25+Image+Unavailable'">
+                </div>
+                <div class="w-full md:w-1/2 lg:w-1/3 slide-in-item">
+                    <img src="hq720.jpg" alt="EA Sports Gameplay" class="rounded-xl shadow-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x400/374151/d1d5db?text=EA+Sports+Image+Unavailable'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-12 md:py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center mb-8 md:mb-12 text-pink-500 fade-in-up-item">About GAMEBOX</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-12">
+                <div class="md:w-1/2">
+                    <p class="text-base md:text-lg leading-relaxed mb-4 md:mb-6 fade-in-up-item">
+                        Welcome to <span class="gamebox-logo"><span class="game">GAME</span><span class="box">BOX</span></span>, your ultimate destination for an unparalleled gaming experience! As a dedicated <span class="font-bold text-pink-400">Gaming Zone</span>, we offer a state-of-the-art environment equipped with the latest gaming consoles and high-performance PCs, ensuring every session is packed with excitement and precision.
+                    </p>
+                    <p class="text-base md:text-lg leading-relaxed fade-in-up-item">
+                        Whether you're a casual player looking for some fun or a competitive gamer seeking intense battles, our zone is designed to cater to all. Come and immerse yourself in the world of gaming with your friends or make new ones!
+                    </p>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="armour-gaming-zone-goyla-dairy-qutub-vihar-delhi-gaming-zones-mbqwz409n8.webp" alt="Gaming Zone Setup" class="rounded-xl shadow-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x400/374151/d1d5db?text=Gaming+Setup+Unavailable'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="games" class="py-12 md:py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center mb-8 md:mb-12 text-purple-500 fade-in-up-item">Our Gaming Arsenal</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <div class="card fade-in-up-item">
+                    <img src="rx.jpg" alt="High-Performance PC Gaming Setup" class="mb-4 rounded-xl shadow-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/d1d5db?text=PC+Image+Unavailable'">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-pink-400">High-Performance PC Gaming</h3>
+                    <p class="text-sm md:text-md text-gray-300 mb-4">
+                        Experience lightning-fast performance and stunning graphics on our high-end gaming PCs, featuring powerful <span class="font-bold text-white">Radeon graphics cards</span>. Dive into your favorite esports titles or explore vast open worlds with unparalleled visual fidelity.
+                    </p>
+                    <ul class="list-disc list-inside text-left text-gray-400 text-sm md:text-base">
+                        <li><span class="font-bold text-white">FC 25</span></li>
+                        <li><span class="font-bold text-white">Cricket 24</span></li>
+                        <li><span class="font-bold text-white">Street Fighter</span></li>
+                        <li><span class="font-bold text-white">Tekken</span></li>
+                        <li><span class="font-bold text-white">Mortal Kombat</span></li>
+                        <li><span class="font-bold text-white">Apex Legends</span></li>
+                        <li><span class="font-bold text-white">GTA 5</span></li>
+                        <li><span class="font-bold text-white">RDR 2</span></li>
+                        <li><span class="font-bold text-white">Valorant</span></li>
+                        <li><span class="font-bold text-white">PUBG PC</span></li>
+                        <li><span class="font-bold text-white">WWE 2K25</span></li>
+                        <li><span class="font-bold text-white">High Refresh Rate Monitors & 4K & 1080p TVs</span></li>
+                        <li><span class="font-bold text-white">You can use wireless gaming mouse and keyboards for gaming.</span></li>
+                    </ul>
+                </div>
+
+                <div class="card fade-in-up-item">
+                    <img src="ps5 games.jpg" alt="PlayStation 5 Gameplay" class="mb-4 rounded-xl shadow-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/d1d5db?text=PS5+Image+Unavailable'">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-400">PlayStation 5</h3>
+                    <p class="text-sm md:text-md text-gray-300 mb-4">
+                        Immerse yourself in next-generation console gaming with the PlayStation 5. Enjoy haptic feedback and adaptive triggers for an unparalleled experience.
+                    </p>
+                    <ul class="list-disc list-inside text-left text-gray-400 text-sm md:text-base">
+                        <li><span class="font-bold text-white">FC 25</span></li>
+                        <li><span class="font-bold text-white">Cricket 24</span></li>
+                        <li><span class="font-bold text-white">WWE 2K25</span></li>
+                        <li><span class="font-bold text-white">Spider-Man 2, God of War Ragnarök</span></li>
+                        <li><span class="font-bold text-white">DualSense Controllers with Hall Effect Joysticks</span></li>
+                        <li><span class="font-bold text-white">Stunning 4K & 1080p TVs</span></li>
+                    </ul>
+                </div>
+
+                <div class="card fade-in-up-item">
+                    <img src="XboxSeriesS_HERO.jpg" alt="Xbox Series S Console and Controller" class="mb-4 rounded-xl shadow-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x400/374151/d1d5db?text=Xbox+Image+Unavailable'">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-green-400">Xbox Series S</h3>
+                    <p class="text-sm md:text-md text-gray-300 mb-4">
+                        Jump into a vast library of games with Xbox Game Pass on the powerful Xbox Series S. Perfect for casual and competitive play.
+                    </p>
+                    <ul class="list-disc list-inside text-left text-gray-400 text-sm md:text-base">
+                        <li><span class="font-bold text-white">FC 25</span></li>
+                        <li><span class="font-bold text-white">Cricket 24</span></li>
+                        <li><span class="font-bold text-white">WWE 2K25</span></li>
+                        <li><span class="font-bold text-white">Forza Horizon 5, Halo Infinite, Starfield</span></li>
+                        <li><span class="font-bold text-white">Ergonomic Xbox Controllers with Hall Effect Joysticks</span></li>
+                        <li><span class="font-bold text-white">Seamless Gaming on 4K & 1080p TVs</span></li>
+                    </ul>
+                </div>
+
+                <div class="card fade-in-up-item">
+                    <img src="tv.jpg" alt="Dynamic Gameplay Flow TV" class="mb-4 rounded-xl shadow-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x400/374151/d1d5db?text=TV+Image+Unavailable'">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-yellow-400">Premium TV Experience</h3>
+                    <p class="text-sm md:text-md text-gray-300 mb-4">
+                        Experience high-impact gaming on our top-of-the-line 4K and 1080p TVs, delivering vibrant colors and incredible detail for every game.
+                    </p>
+                    <ul class="list-disc list-inside text-left text-gray-400 text-sm md:text-base">
+                        <li><span class="font-bold text-white">Crystal-clear 4K & 1080p resolution</span></li>
+                        <li><span class="font-bold text-white">Immersive visual fidelity</span></li>
+                        <li><span class="font-bold text-white">Enhanced gaming performance</span></li>
+                        <li><span class="font-bold text-white">Large screens for a cinematic feel</span></li>
+                    </ul>
+                </div>
+
+                <div class="card fade-in-up-item">
+                    <img src="Square_Image_Shooter_III_WGP13S_3.webp" alt="Fantech Shooter III WGP13S Controller" class="mb-4 rounded-xl shadow-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x400/374151/d1d5db?text=Controller+Image+Unavailable'">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-yellow-400">Precision PC Controllers</h3>
+                    <p class="text-sm md:text-md text-gray-300 mb-4">
+                        Dominate every game with our high-quality PC controllers, featuring advanced technology for superior control and responsiveness.
+                    </p>
+                    <ul class="list-disc list-inside text-left text-gray-400 text-sm md:text-base">
+                        <li><span class="font-bold text-white">Hall Effect Joysticks for drift-free precision</span></li>
+                        <li><span class="font-bold text-white">Minimal input lag for competitive edge</span></li>
+                        <li><span class="font-bold text-white">Ergonomic design for extended comfort</span></li>
+                        <li><span class="font-bold text-white">Vibration feedback for immersive gameplay</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-12 md:py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center mb-8 md:mb-12 text-pink-500 fade-in-up-item">Hourly Pricing</h2>
+            <p class="text-base md:text-xl text-center mb-8 md:mb-12 text-gray-300 fade-in-up-item">
+                Enjoy special discounts when you rent two or more controllers! The more you play, the more you save.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <div class="pricing-card fade-in-up-item">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-400">PC Gaming</h3>
+                    <div class="flex flex-col items-center mb-6">
+                        <p class="price-option">40 tk<span class="price-duration">/30 min per controller</span></p>
+                        <p class="price-option">70 tk<span class="price-duration">/1 hour per controller</span></p>
+                    </div>
+                    <ul class="list-disc list-inside text-left text-gray-300 text-sm md:text-base mb-6">
+                        <li>High-performance PCs</li>
+                        <li>Access to a wide range of PC games</li>
+                        <li>Ideal for competitive and casual play</li>
+                    </ul>
+                    <button class="btn-primary">Book PC Slot</button>
+                </div>
+
+                <div class="pricing-card fade-in-up-item">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-pink-400">PlayStation 5</h3>
+                    <div class="flex flex-col items-center mb-6">
+                        <p class="price-option">40 tk<span class="price-duration">/30 min per controller</span></p>
+                        <p class="price-option">70 tk<span class="price-duration">/1 hour per controller</span></p>
+                    </div>
+                    <ul class="list-disc list-inside text-left text-gray-300 text-sm md:text-base mb-6">
+                        <li>Next-gen PS5 consoles</li>
+                        <li>Immersive DualSense experience</li>
+                        <li>Access to exclusive PS5 titles</li>
+                    </ul>
+                    <button class="btn-primary">Book PS5 Slot</button>
+                </div>
+
+                <div class="pricing-card fade-in-up-item">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-green-400">Xbox Series S</h3>
+                    <div class="flex flex-col items-center mb-6">
+                        <p class="price-option">40 tk<span class="price-duration">/30 min per controller</span></p>
+                        <p class="price-option">70 tk<span class="price-duration">/1 hour per controller</span></p>
+                    </div>
+                    <ul class="list-disc list-inside text-left text-gray-300 text-sm md:text-base mb-6">
+                        <li>Compact and powerful Xbox Series S</li>
+                        <li>Access to Xbox Game Pass library</li>
+                        <li>Great for all types of gamers</li>
+                    </ul>
+                    <button class="btn-primary">Book Xbox Slot</button>
+                </div>
+
+                <div class="pricing-card border-pink-600 scale-105 fade-in-up-item">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-yellow-400">Bulk Discounts!</h3>
+                    <div class="flex flex-col items-center mb-6">
+                        <p class="text-xl md:text-2xl font-semibold text-white mb-2">Rent 2 Controllers:</p>
+                        <p class="text-base md:text-xl text-gray-300">Get a special rate!</p>
+                        <p class="text-xl md:text-2xl font-semibold text-white mt-4 mb-2">Rent 3+ Controllers:</p>
+                        <p class="text-base md:text-xl text-gray-300">Even bigger savings!</p>
+                    </div>
+                    <ul class="list-disc list-inside text-left text-gray-300 text-sm md:text-base mb-6">
+                        <li>Perfect for group gaming sessions</li>
+                        <li>Discounts automatically applied</li>
+                        <li>Inquire at the counter for details</li>
+                    </ul>
+                    <button class="btn-primary">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-12 md:py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center mb-8 md:mb-12 text-purple-500 fade-in-up-item">Get in Touch!</h2>
+            <p class="text-base md:text-lg mb-6 max-w-2xl mx-auto fade-in-up-item">
+                Ready to game? Visit us or contact us for bookings and inquiries.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-12">
+                <div class="text-base md:text-lg fade-in-up-item">
+                    <p class="font-bold text-pink-400">Address:</p>
+                    <p>Goran 8 no. CNG stand, Khilgaon, Dhaka 1219</p>
+                </div>
+                <div class="text-base md:text-lg fade-in-up-item">
+                    <p class="font-bold text-pink-400">Phone:</p>
+                    <p>01879380007</p>
+                </div>
+                <div class="text-base md:text-lg fade-in-up-item">
+                    <p class="font-bold text-pink-400">Email:</p>
+                    <p>info@gamebox.com</p>
+                </div>
+            </div>
+            <div class="mt-10">
+                <h3 class="text-2xl md:text-3xl font-bold mb-6 text-pink-400 fade-in-up-item">Find Us on the Map</h3>
+                <div class="bg-gray-800 rounded-xl shadow-xl w-full max-w-3xl mx-auto h-64 md:h-80 flex items-center justify-center text-gray-400 text-xl fade-in-up-item">
+                    <iframe 
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.8589017927217!2d90.42924181536354!3d23.789577093063507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c76ebfe0b81b%3A0xf33a13f1f1e79a20!2sGAMEBOX%20Gaming%20Zone!5e0!3m2!1sen!2sbd!4v1716380000000!5m2!1sen!2sbd" 
+  width="100%" 
+  height="100%" 
+  style="border:0;" 
+  allowfullscreen="" 
+  loading="lazy" 
+  referrerpolicy="no-referrer-when-downgrade" 
+  class="rounded-xl">
+</iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 py-6 md:py-8 text-center">
+        <div class="container mx-auto px-4 fade-in-up-item">
+            <p class="text-sm md:text-base">© 2025 <span class="gamebox-logo"><span class="game">GAME</span><span class="box">BOX</span></span>. All rights reserved.</p>
+            <p class="mt-2 text-sm md:text-base">Designed with passion for gamers.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileNavMenu = document.getElementById('mobile-nav-menu');
+        const desktopNav = document.getElementById('desktop-nav');
+
+        if (mobileMenuToggle && mobileNavMenu) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileNavMenu.classList.toggle('active');
+                // Toggle visibility of desktop nav on small screens
+                if (window.innerWidth < 768) {
+                    desktopNav.style.display = mobileNavMenu.classList.contains('active') ? 'none' : 'flex';
+                }
+            });
+
+            // Close mobile menu when a link is clicked
+            mobileNavMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileNavMenu.classList.remove('active');
+                    if (window.innerWidth < 768) {
+                        desktopNav.style.display = 'none'; // Ensure desktop nav remains hidden
+                    }
+                });
+            });
+
+            // Handle nested dropdown for mobile
+            const mobileGamesLink = mobileNavMenu.querySelector('li.relative > a[href="#games"]');
+            const mobileNestedDropdown = mobileNavMenu.querySelector('[data-mobile-nested]');
+
+            if (mobileGamesLink && mobileNestedDropdown) {
+                mobileGamesLink.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent immediate scroll
+                    mobileNestedDropdown.style.display = mobileNestedDropdown.style.display === 'none' ? 'flex' : 'none';
+                });
+            }
+        }
+
+
+        // JavaScript for scroll-in animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedItems = document.querySelectorAll('.slide-in-item, .fade-in-up-item');
+
+            const observerOptions = {
+                root: null, // Use the viewport as the root
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the item is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // Optional: Stop observing once visible if animation should only play once
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            animatedItems.forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
+
+
+<!-- Floating Contact Buttons -->
+<div class="fixed bottom-4 right-4 z-50 space-y-3">
+  <!-- WhatsApp -->
+  <a href="https://wa.me/8801879380007?text=Hi!%20I%20want%20to%20book%20a%20game%20session%20at%20GAMEBOX" target="_blank" class="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-lg hover:scale-105 transition transform duration-200">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-5 h-5 mr-2">
+    Book via WhatsApp
+  </a>
+
+  <!-- Call Now -->
+  <a href="tel:+8801879380007" class="flex items-center px-4 py-2 bg-pink-600 text-white rounded-full shadow-lg hover:scale-105 transition transform duration-200">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h2l3 7-1.5 4.5a13.042 13.042 0 006 6L14 19l7 3V3H3z" />
+    </svg>
+    Call Now
+  </a>
+</div>
+
+</body>
+</html>
