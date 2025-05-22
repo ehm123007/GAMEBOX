@@ -7,20 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-
-html {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-}
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #ff69b4, #7c3aed);
-    border-radius: 6px;
-}
-::-webkit-scrollbar-track {
-    background: #2d3748;
-}
-
-
         /* Custom font family - changed to Montserrat */
         body {
             font-family: 'Montserrat', sans-serif;
@@ -211,8 +197,7 @@ html {
                 flex-wrap: wrap; /* Allow items to wrap */
             }
         }
-    
-</style>
+    </style>
 </head>
 <body class="antialiased">
 
@@ -268,7 +253,7 @@ html {
                             <li><a href="#games">Street Fighter</a></li>
                             <li><a href="#games">Tekken</a></li>
                             <li><a href="#games">Mortal Kombat</a></li>
-                            <li><a href="#games">Apex Legends</a></li>
+                            <li><a href="#games">Apex Legends</li>
                             <li><a href="#games">GTA 5</a></li>
                             <li><a href="#games">RDR 2</a></li>
                             <li><a href="#games">Valorant</a></li>
@@ -518,16 +503,17 @@ html {
             <div class="mt-10">
                 <h3 class="text-2xl md:text-3xl font-bold mb-6 text-pink-400 fade-in-up-item">Find Us on the Map</h3>
                 <div class="bg-gray-800 rounded-xl shadow-xl w-full max-w-3xl mx-auto h-64 md:h-80 flex items-center justify-center text-gray-400 text-xl fade-in-up-item">
-    <iframe 
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.8589017927217!2d90.42924181536354!3d23.789577093063507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c76ebfe0b81b%3A0xf33a13f1f1e79a20!2sGAMEBOX%20Gaming%20Zone!5e0!3m2!1sen!2sbd!4v1716380000000!5m2!1sen!2sbd" 
-  width="100%" 
-  height="100%" 
-  style="border:0;" 
-  allowfullscreen="" 
-  loading="lazy" 
-  referrerpolicy="no-referrer-when-downgrade" 
-  class="rounded-xl">
-</iframe>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3652.053744655455!2d90.4208399757303!3d23.744955778643886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b85a3c1a3b5b%3A0x6e7e7e7e7e7e7e7e!2sKhilgaon%2C%20Dhaka%201219!5e0!3m2!1sen!2sbd!4v1700000000000!5m2!1sen!2sbd"
+                        width="100%"
+                        height="100%"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="rounded-xl"
+                        onerror="this.src='https://placehold.co/600x400/374151/d1d5db?text=Map+Unavailable'"
+                    ></iframe>
                 </div>
             </div>
         </div>
@@ -603,24 +589,6 @@ html {
             });
         });
     </script>
-
-
-<!-- Floating Contact Buttons -->
-<div class="fixed bottom-4 right-4 z-50 space-y-3">
-  <!-- WhatsApp -->
-  <a href="https://wa.me/8801879380007?text=Hi!%20I%20want%20to%20book%20a%20game%20session%20at%20GAMEBOX" target="_blank" class="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-lg hover:scale-105 transition transform duration-200">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-5 h-5 mr-2">
-    Book via WhatsApp
-  </a>
-
-  <!-- Call Now -->
-  <a href="tel:+8801879380007" class="flex items-center px-4 py-2 bg-pink-600 text-white rounded-full shadow-lg hover:scale-105 transition transform duration-200">
-    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h2l3 7-1.5 4.5a13.042 13.042 0 006 6L14 19l7 3V3H3z" />
-    </svg>
-    Call Now
-  </a>
-</div>
 
 </body>
 </html>
